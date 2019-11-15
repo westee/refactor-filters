@@ -48,16 +48,11 @@ public class User {
 
     // 过滤姓王的用户
     public static List<User> filterWangUsers(List<User> users) {
-        List<User> results = new ArrayList<>();
-        for (User user : users) {
-            if (user.name.startsWith("王")) {
-                results.add(user);
-            }
-        }
-        return results;
+        return new filter(users, new 姓王的条件());
     }
 
-    class 姓王的条件 implements 条件{
+    // 永远使用static的内部类，除非报错
+    static class 姓王的条件 implements 条件{
         @Override
         public boolean 判断满不满足一个条件(User user){
             return user.getName().startsWith("王");

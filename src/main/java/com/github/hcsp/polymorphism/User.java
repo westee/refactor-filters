@@ -2,6 +2,8 @@ package com.github.hcsp.polymorphism;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class User {
@@ -21,13 +23,42 @@ public class User {
         return name;
     }
 
+    public static void main(String[] args) {
+        List<User> users = new ArrayList<>();
+        // Consumer 接口内部接受一个对象，输出void（没有输出）
+        users.forEach(new Consumer<User>() {
+            @Override
+            public void accept(User user) {
+                // println方法内部接受一个对象，输出void，符合这个规则因此可以进行转换。
+                System.out.println(user);
+            }
+        });
+//        users.forEach(System.out::println);
+//        users.forEach(User::myPrint);
+    }
+
+    public static void test() {
+//        map(new User(1, "老王"), new Function<User, String>() {
+//            @Override
+//            public String apply(User user) {
+//                return user.getName();
+//            }
+//        });
+        map(new User(1, "老王"), user -> user.getName());
+//          map(new User(1, "老王"), User::getName);
+    }
+
+    public static String map(User user, Function<User, String> function) {
+        return function.apply(user);
+    }
+
     // 实例方法 实际有一个this参数
-    public boolean isLi(){
+    public boolean isLi() {
         return this.name.startsWith("王");
     }
 
     // 静态方法
-    private static boolean userWithEvenId(User user){
+    private static boolean userWithEvenId(User user) {
         return user.getId() % 2 == 0;
     }
 
@@ -43,7 +74,7 @@ public class User {
         return filter(users, (Predicate<User>) user -> user.getName().startsWith("张"));
     }
 
-    public static List<User> filterLi(List<User> users){
+    public static List<User> filterLi(List<User> users) {
         return filter(users, User::isLi);
     }
 
@@ -70,4 +101,6 @@ public class User {
         }
         return results;
     }
+
+
 }
